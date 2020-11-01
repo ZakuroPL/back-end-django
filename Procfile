@@ -1,0 +1,1 @@
+web: gunicorn easyWarehouse.wsgi --log-file -
