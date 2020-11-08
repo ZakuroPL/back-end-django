@@ -35,7 +35,6 @@ class LocationViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def add_transfer(self, request, pk=None):
-        if 'pcs' in request.data:
             locationFrom = request.data['locationFrom']
             locationFromId = Location.objects.get(id=locationFrom)
             locationTo = Location.objects.get(id=pk)
@@ -43,28 +42,61 @@ class LocationViewSet(viewsets.ModelViewSet):
             thisProduct = Product.objects.get(id=product)
             pcs = request.data['pcs']
             user = request.user
-
-            try:
-                transfer = Transfer.objects.get(location=locationTo, product=thisProduct)
-                intPcs = int(pcs)
-                transfer.pcs = intPcs + transfer.pcs
-                transfer.user = user
-                transfer.save()
-                if(intPcs>0 or locationTo.id == 2):
+            intPcs = int(pcs)
+            if locationTo.id == 1 and locationFromId.id == 1:    # supply
+                try:
+                    transfer = Transfer.objects.get(location=locationTo, product=thisProduct)
+                    transfer.pcs = intPcs + transfer.pcs
+                    transfer.user = user
+                    transfer.save()
                     HistoryOfTransfer.objects.create(product=thisProduct, locationFrom=locationFromId,
                                                      locationTo=locationTo, pcs=pcs, user=user)
-                response = {'message: ' 'transfer was updated'}
-                return Response(response, status=status.HTTP_200_OK)
-            except:
-                Transfer.objects.create(product=thisProduct, location=locationTo, pcs=pcs, user=user)
-                HistoryOfTransfer.objects.create(product=thisProduct, locationFrom=locationFromId,
-                                                 locationTo=locationTo, pcs=pcs, user=user)
-                response = {'message: ' 'transfer was created'}
-                return Response(response, status=status.HTTP_200_OK)
+                    response = {'message: ' 'transfer was updated'}
+                    return Response(response, status=status.HTTP_200_OK)
+                except:
+                    Transfer.objects.create(product=thisProduct, location=locationTo, pcs=pcs, user=user)
+                    HistoryOfTransfer.objects.create(product=thisProduct, locationFrom=locationFromId,
+                                                     locationTo=locationTo, pcs=pcs, user=user)
+                    response = {'message: ' 'transfer was created'}
+                    return Response(response, status=status.HTTP_200_OK)
+            elif locationTo.id == 2 and locationFromId.id == 2:    # packing
+                    transfer = Transfer.objects.get(location=locationTo, product=thisProduct)
+                    transfer.user = user
+                    if transfer.pcs >= intPcs:
+                        transfer.pcs = transfer.pcs - intPcs
+                        transfer.save()
+                        HistoryOfTransfer.objects.create(product=thisProduct, locationFrom=locationFromId,
+                                                         locationTo=locationTo, pcs=pcs, user=user)
+                        response = {'message: ' 'transfer was updated'}
+                        return Response(response, status=status.HTTP_200_OK)
+                    else:
+                        response = {'message: ' 'You want to transfer more than you have'}
+                        return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                try:
+                    transfer = Transfer.objects.get(location=locationTo, product=thisProduct)
+                    transfer.pcs = intPcs + transfer.pcs
+                    transfer.user = user
+                    transfer.save()
+                    HistoryOfTransfer.objects.create(product=thisProduct, locationFrom=locationFromId,
+                                                     locationTo=locationTo, pcs=pcs, user=user)
+                    transfer2 = Transfer.objects.get(location=locationFromId, product=thisProduct)
+                    transfer2.pcs = transfer2.pcs - intPcs
+                    transfer2.user = user
+                    transfer2.save()
+                    response = {'message: ' 'transfer was updated'}
+                    return Response(response, status=status.HTTP_200_OK)
+                except:
+                    Transfer.objects.create(product=thisProduct, location=locationTo, pcs=pcs, user=user)
+                    HistoryOfTransfer.objects.create(product=thisProduct, locationFrom=locationFromId,
+                                                     locationTo=locationTo, pcs=pcs, user=user)
+                    transfer2 = Transfer.objects.get(location=locationFromId, product=thisProduct)
+                    transfer2.pcs = transfer2.pcs - intPcs
+                    transfer2.user = user
+                    transfer2.save()
+                    response = {'message: ' 'transfer was created'}
+                    return Response(response, status=status.HTTP_200_OK)
 
-        else:
-            response = {'message: ' 'transfer error'}
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 class TransferViewSet(viewsets.ModelViewSet):
     queryset = Transfer.objects.all()
