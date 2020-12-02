@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
-from .models import Product, Location, Transfer, HistoryOfTransfer, HistoryOfLoginToZakuro
+from .models import Product, Location, Transfer, HistoryOfTransfer, HistoryOfLoginToZakuro, Rental, Car
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -40,4 +40,19 @@ class HistoryOfLoginToZakuroSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoryOfLoginToZakuro
         fields = '__all__'
-# //////////////////FOR DENTIST/////////////////////////////////////////////////////
+# //////////////////FOR RENTAL/////////////////////////////////////////////////////
+class CarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Car
+        fields = '__all__'
+
+class RentalFullSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rental
+        fields = '__all__'
+
+class RentalForSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rental
+        fields = ['id', 'car', 'rentFrom', 'rentTo']
+

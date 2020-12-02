@@ -1,17 +1,18 @@
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import  viewsets, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from django.http import JsonResponse
 
-from .models import Product, Location, Transfer, HistoryOfTransfer, HistoryOfLoginToZakuro
+from .models import Product, Location, Transfer, HistoryOfTransfer, HistoryOfLoginToZakuro, Rental, Car
 from .serializers import ProductSerializer, LocationSerializer, TransferSerializer, UserSerializer, \
-    HistoryOfTransferSerializer, HistoryOfLoginToZakuroSerializer
+    HistoryOfTransferSerializer, HistoryOfLoginToZakuroSerializer, RentalFullSerializer, \
+    RentalForSearchSerializer, CarSerializer
 from django.core.mail import send_mail
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -124,12 +125,13 @@ class Login(ObtainAuthToken):
         token = Token.objects.get(key=response.data['token'])
         user = User.objects.get(id=token.user_id)
         try:
-            HistoryOfLoginToZakuro.objects.create(user=user)
-            send_mail(f'{user.username} zalogował się do Zakuro',
-                      f'Użytkownik: {user.username}',
-                      'zakuro.developer@gmail.com',
-                      ['granatowski.d@gmail.com'],
-                      fail_silently=False)
+            if(user.username != 'facebook'):
+                HistoryOfLoginToZakuro.objects.create(user=user)
+                send_mail(f'{user.username} zalogował się do Zakuro',
+                          f'Użytkownik: {user.username}',
+                          'zakuro.developer@gmail.com',
+                          ['granatowski.d@gmail.com'],
+                          fail_silently=False)
             return Response(token.key)
         except:
             response = {'message: ' 'History of login wasnt saved'}
@@ -164,8 +166,21 @@ def send_email(request):
         return JsonResponse({'message':'email sent'})
     except:
         return JsonResponse({'message':'email not sent'})
-# //////////////////FOR DENTIST/////////////////////////////////////////////////////
+# //////////////////FOR RENTAL/////////////////////////////////////////////////////
+class CarViewSet(viewsets.ModelViewSet):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
+    permission_classes = (AllowAny, )
 
+class RentalFullViewSet(viewsets.ModelViewSet):
+    queryset = Rental.objects.all()
+    serializer_class = RentalFullSerializer
+    permission_classes = (AllowAny, )
+
+class RentalSearchViewSet(viewsets.ModelViewSet):
+    queryset = Rental.objects.all()
+    serializer_class = RentalForSearchSerializer
+    permission_classes = (AllowAny, )
 
 
 

@@ -55,12 +55,27 @@ class HistoryOfTransfer (models.Model):
 
     def user_name(self):
         return self.user.username;
-# //////////////////FOR ZAKURO/////////////////////////////////////////////////////
+# //////////////////FOR ZAKURO//////////////////////////////////////////////////////////////////
 class HistoryOfLoginToZakuro (models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     timeAndDate = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.user.username
-# //////////////////FOR DENTIST/////////////////////////////////////////////////////
+# //////////////////FOR RENTAL/////////////////////////////////////////////////////
+class Car (models.Model):
+    car = models.CharField(max_length=64)
+    carPicture = models.CharField(max_length=64)
+    seats = models.IntegerField()
+    trunk = models.CharField(max_length=64)
+    price = models.IntegerField()
+    fuel = models.CharField(max_length=64, default='benzyna')
+    gearbox = models.CharField(max_length=64, default='manualna')
 
-
+class Rental (models.Model):
+    car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    rentFrom = models.DateTimeField()
+    rentTo = models.DateTimeField()
+    firstName = models.CharField(max_length=64)
+    lastName = models.CharField(max_length=64)
+    phoneNumber = models.BigIntegerField()
+    email = models.CharField(max_length=64)
