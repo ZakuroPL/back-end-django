@@ -54,9 +54,9 @@ REST_FRAMEWORK = {
 }
 CORS_ORIGIN_WHITELIST = [
     # "http://localhost:4200",
-    "http://zakuro.eu",
-    "http://easy-warehouse.zakuro.eu",
-    "http://rentalcars.zakuro.eu",
+    "zakuro.eu",
+    "easy-warehouse.zakuro.eu",
+    "rentalcars.zakuro.eu",
 ]
 
 
