@@ -52,7 +52,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     }
 }
-CORS_ORIGIN_WHITELIST = [
+CORS_ALLOWED_ORIGINS = [
     # "http://localhost:4200",
     "zakuro.eu",
     "easy-warehouse.zakuro.eu",
