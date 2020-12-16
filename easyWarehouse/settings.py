@@ -54,9 +54,9 @@ REST_FRAMEWORK = {
 }
 CORS_ALLOWED_ORIGINS = [
     # "http://localhost:4200",
-    "zakuro.eu",
-    "easy-warehouse.zakuro.eu",
-    "rentalcars.zakuro.eu",
+    "https://zakuro.eu",
+    "http://easy-warehouse.zakuro.eu",
+    "http://rentalcars.zakuro.eu",
 ]
 
 
