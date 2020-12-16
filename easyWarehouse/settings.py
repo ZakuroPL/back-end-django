@@ -55,8 +55,11 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_WHITELIST = [
     # "http://localhost:4200",
     "https://www.zakuro.eu",
+    "https://zakuro.eu",
     "http://www.easy-warehouse.zakuro.eu",
+    "http://easy-warehouse.zakuro.eu",
     "http://www.rentalcars.zakuro.eu",
+    "http://rentalcars.zakuro.eu",
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
