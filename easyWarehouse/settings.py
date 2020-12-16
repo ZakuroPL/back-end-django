@@ -52,14 +52,12 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     }
 }
-CORS_ALLOWED_ORIGINS = [
+CORS_ORIGIN_WHITELIST = [
     # "http://localhost:4200",
     "https://zakuro.eu",
-    "http://easy-warehouse.zakuro.eu",
-    "http://rentalcars.zakuro.eu",
+    # "http://easy-warehouse.zakuro.eu",
+    # "http://rentalcars.zakuro.eu",
 ]
-
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
