@@ -76,17 +76,18 @@ class LocationViewSet(viewsets.ModelViewSet):
             else:
                 try:
                     transfer = Transfer.objects.get(location=locationTo, product=thisProduct)
-                    transfer.pcs = intPcs + transfer.pcs
-                    transfer.user = user
-                    transfer.save()
-                    HistoryOfTransfer.objects.create(product=thisProduct, locationFrom=locationFromId,
-                                                     locationTo=locationTo, pcs=pcs, user=user)
-                    transfer2 = Transfer.objects.get(location=locationFromId, product=thisProduct)
-                    transfer2.pcs = transfer2.pcs - intPcs
-                    transfer2.user = user
-                    transfer2.save()
-                    response = {'message: ' 'transfer was updated'}
-                    return Response(response, status=status.HTTP_200_OK)
+                    if intPcs >= transfer.pcs:
+                        transfer.pcs = intPcs + transfer.pcs
+                        transfer.user = user
+                        transfer.save()
+                        HistoryOfTransfer.objects.create(product=thisProduct, locationFrom=locationFromId,
+                                                         locationTo=locationTo, pcs=pcs, user=user)
+                        transfer2 = Transfer.objects.get(location=locationFromId, product=thisProduct)
+                        transfer2.pcs = transfer2.pcs - intPcs
+                        transfer2.user = user
+                        transfer2.save()
+                        response = {'message: ' 'transfer was updated'}
+                        return Response(response, status=status.HTTP_200_OK)
                 except:
                     Transfer.objects.create(product=thisProduct, location=locationTo, pcs=pcs, user=user)
                     HistoryOfTransfer.objects.create(product=thisProduct, locationFrom=locationFromId,
@@ -181,6 +182,5 @@ class RentalSearchViewSet(viewsets.ModelViewSet):
     queryset = Rental.objects.all()
     serializer_class = RentalForSearchSerializer
     permission_classes = (AllowAny, )
-
-
+# //////////////////FOR DENTAL/////////////////////////////////////////////////////
 
