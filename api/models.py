@@ -79,3 +79,5 @@ class Rental (models.Model):
     lastName = models.CharField(max_length=64)
     phoneNumber = models.BigIntegerField()
     email = models.CharField(max_length=64)
+# //////////////////FOR DENTAL/////////////////////////////////////////////////////
+

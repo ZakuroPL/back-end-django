@@ -55,4 +55,4 @@ class RentalForSearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rental
         fields = ['id', 'car', 'rentFrom', 'rentTo']
-
+# //////////////////FOR DENTAL/////////////////////////////////////////////////////

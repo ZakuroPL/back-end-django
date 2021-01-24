@@ -17,6 +17,7 @@ router.register('car', CarViewSet)
 router.register('rental-full', RentalFullViewSet)
 router.register('rental-search', RentalSearchViewSet)
 
+
 urlpatterns = [
     path('', include(router.urls)),
 ]

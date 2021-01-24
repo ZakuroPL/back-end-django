@@ -131,18 +131,19 @@ class Login(ObtainAuthToken):
         response = super(Login, self).post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
         user = User.objects.get(id=token.user_id)
-        try:
-            if(user.username != 'facebook'):
-                HistoryOfLoginToZakuro.objects.create(user=user)
-                send_mail(f'{user.username} zalogował się do Zakuro',
-                          f'Użytkownik: {user.username}',
-                          'zakuro.developer@gmail.com',
-                          ['granatowski.d@gmail.com'],
-                          fail_silently=False)
-            return Response(token.key)
-        except:
-            response = {'message: ' 'History of login wasnt saved'}
-            return Response(response)
+        return Response(token.key)
+        # try:
+        #     if user.username != 'admin':
+        #         HistoryOfLoginToZakuro.objects.create(user=user)
+        #         send_mail(f'{user.username} zalogował się do Zakuro',
+        #                   f'Użytkownik: {user.username}',
+        #                   'zakuro.developer@gmail.com',
+        #                   ['granatowski.d@gmail.com'],
+        #                   fail_silently=False)
+        #     return Response(token.key)
+        # except:
+        #     response = {'message: ' 'History of login wasnt saved'}
+        #     return Response(response)
 
 
 

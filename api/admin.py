@@ -10,4 +10,3 @@ admin.site.register(HistoryOfLoginToZakuro)
 
 admin.site.register(Car)
 admin.site.register(Rental)
-
