@@ -143,9 +143,9 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticFiles')
 
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'server933367.nazwa.pl'
 EMAIL_PORT = '587'
-EMAIL_HOST_USER = 'zakuro.developer@gmail.com'
+EMAIL_HOST_USER = 'contact@zakuro.eu'
 EMAIL_HOST_PASSWORD = config('PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False

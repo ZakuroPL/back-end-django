@@ -163,12 +163,12 @@ def send_email(request):
     try:
         send_mail(f'{name} wysłał wiadomość z Zakuro',
                   f'adres: {email}/// wiadomość: {message}',
-                  'zakuro.developer@gmail.com',
+                  'contact@zakuro.eu',
                   ['granatowski.d@gmail.com'],
                   fail_silently=False)
         send_mail('Thanks for contact with Zakuro',
-                  'Hi. I will response as soon as possible.',
-                  'zakuro.developer@gmail.com',
+                  'Hi. Thanks for contact with me. I will response as soon as possible.',
+                  'contact@zakuro.eu',
                   [f'{email}'],
                   fail_silently=False)
         return JsonResponse({'message':'email sent'})
